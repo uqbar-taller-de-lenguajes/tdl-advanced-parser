@@ -1,45 +1,27 @@
-# JS stub project
+# TDL: Advanced Parsers
 
-This project intends to provide a minimal and easy setup for language development on JS.
+Código para el 3er encuentro del Taller de Lenguajes 2017.
 
-## Prerequisites
+## Roadmap
 
-You need to have `node` installed. It is also recommended to install `yarn` to use instead of `npm`.
+* Repaso rápido de la tarea.
+* Discusión: Gramáticas recursivas.
+* Código de ejemplo: Registros.
+* Discusión: Precedencia y Asociatividad.
+* Código de ejemplo: Operadores Binarios.
+* Desarrollo individual: Extender nuestro lenguaje simple con registros y operadores.
 
-## Installation
+## Tarea
+* Agregar `\` (DIV) como operador de números.
+* Agregar `&&` (AND) y `||` (OR) como operadores de booleanos.
+* Agregar el operador unario prefijo `!` (NOT).
 
-Just run this on the project root folder:
+## Código
 
-```
-yarn
-```
+Este repositorio tiene varios branches:
 
- (or, if you have to use npm instad of yarn)
-
-```
-npm install
-```
-
-## Running the tests
-
-To run the tests simply run the following command:
-
-```
-yarn test
-```
-
- (or, if you have to use npm instad of yarn)
-
-```
-npm test
-```
-
-### Content Description
-
-The folder `/src` should contain all your sources, including the pegjs' grammar definitions. A grammar example is already provided.
-
-The folder `/test` should contain all the tests files. It is recommended to use the extension `.test.js` on all the tests.
-
-The file `package.json` contains a general definition of your project, including it's name, version and dependencies. Handle it with care.
-
-The file `yarn.lock` contains metadata about the dependencies. You should never manually update this file.
+* `master`: Este branch contiene el código con el que se empezó el taller.
+* `registries`: Este branch contiene código que extiende el presentado en `master` con la implementación de registros vista.
+* `registries-and-operators`: Este branch contiene código que extiende el presentado en `registries` con la implementación de operadores vista.
+* `homework`: Este branch extiende el código presentado en `registries-and-operators`, completandolo con una posible implementación de la tarea.
+* `homework-tests`: Este branch contiene sólamente los tests presentes en el branch `homework` y puede ser tomado de referencia para validar la tarea.
