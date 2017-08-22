@@ -1,16 +1,52 @@
+import { Bool, If, IsZero, Prev, Succ, Zero } from '../src/model'
 import { describe, it } from 'mocha'
 
 import { expect } from 'chai'
-import parse from '../src/parser'
+import parser from '../src/parser'
 
-describe('parser', () => {
-  describe('example', () => {
-    it('parses when it should', () => {
-      expect(parse('aaabbb')).to.deep.equal(['a', ['a', ['a', null, 'b'], 'b'], 'b'])
+describe('simple language parser', () => {
+
+  describe('expression', () => {
+
+    const parse = text => parser(text, { startRule: 'expression' })
+
+    it('should parse booleans as a boolean values', () => {
+      expect(parse('true')).to.deep.equal(Bool(true))
+      expect(parse('false')).to.deep.equal(Bool(false))
     })
 
-    it('fails when it should', () => {
-      expect(() => parse('abc')).to.throw()
+    it('should parse 0', () => {
+      expect(parse('0')).to.deep.equal(Zero)
+    })
+
+    it('should parse succ', () => {
+      expect(parse('succ 0')).to.deep.equal(Succ(Zero))
+    })
+
+    it('should parse prev', () => {
+      expect(parse('prev 0')).to.deep.equal(Prev(Zero))
+    })
+
+    it('should parse isZero', () => {
+      expect(parse('isZero 0')).to.deep.equal(IsZero(Zero))
+    })
+
+    it('should parse if-then-else', () => {
+      const src = 'if true then true else false'
+      const expected = If(Bool(true), Bool(true), Bool(false))
+
+      expect(parse(src)).to.deep.equal(expected)
+    })
+
+    it('should parse nested if-then-else', () => {
+      const src = 'if if true then true else true then if true then true else false else if false then false else true'
+      const expected = If(
+        If(Bool(true), Bool(true), Bool(true)),
+        If(Bool(true), Bool(true), Bool(false)),
+        If(Bool(false), Bool(false), Bool(true)),
+      )
+
+      expect(parse(src)).to.deep.equal(expected)
     })
 
   })
