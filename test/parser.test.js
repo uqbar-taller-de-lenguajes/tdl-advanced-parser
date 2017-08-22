@@ -1,4 +1,4 @@
-import { Access, Bool, If, IsZero, Prev, Registry, Succ, Zero } from '../src/model'
+import { Access, BinaryOp, Bool, If, IsZero, Prev, Registry, Succ, Zero } from '../src/model'
 import { describe, it } from 'mocha'
 
 import { expect } from 'chai'
@@ -59,6 +59,13 @@ describe('simple language parser', () => {
     it('should parse registry access chains', () => {
       const src = '{x:0;}.x.y'
       const expected = Access(Access(Registry([{ key: 'x', value: Zero }]), 'x'), 'y')
+
+      expect(parse(src)).to.deep.equal(expected)
+    })
+
+    it('should parse operators associated to the proper precedence', () => {
+      const src = '0 + 0 * 0 - 0'
+      const expected = BinaryOp(BinaryOp(Zero, '+', BinaryOp(Zero, '*', Zero)), '-', Zero)
 
       expect(parse(src)).to.deep.equal(expected)
     })

@@ -8,3 +8,5 @@ export const IsZero = (value) => ({ type: 'iszero', value })
 
 export const Registry = (entries) => ({ type: 'registry', entries })
 export const Access = (target, key) => ({ type: 'access', target, key })
+
+export const BinaryOp = (left, op, right) => ({ type: 'binaryOp', left, op, right })
