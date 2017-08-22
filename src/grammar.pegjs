@@ -1,6 +1,6 @@
 {
   const path = require('path')
-  const { Bool, If, And, Or, Zero, Succ, Prev, IsZero, Registry, Access, BinaryOp } = require(path.resolve('src/model.js'))
+  const { Bool, If, And, Or, Zero, Succ, Prev, IsZero, Registry, Access, BinaryOp, Neg } = require(path.resolve('src/model.js'))
 
   const reduceOperatorChain = (target, operations) => operations.reduce((left, [,op,,right]) => BinaryOp(left,op,right) , target)
 }
@@ -8,9 +8,11 @@
 _ = __?
 __ = [ \t\n\r]+
 
-expression = addition
-addition = left:production rest:( _ ('+'/'-') _ production )* { return reduceOperatorChain(left, rest) }
-production = left:registryAccess rest:( _ '*' _ registryAccess )* { return reduceOperatorChain(left, rest) }
+expression = conjunction
+conjunction = left:negation       rest:( _ ('&&'/'||') _ negation       )* { return reduceOperatorChain(left, rest) }
+negation    = neg:'!'? exp:addition                                        { return neg ? Neg(exp) : exp }
+addition =    left:production     rest:( _ ('+'/'-')   _ production     )* { return reduceOperatorChain(left, rest) }
+production =  left:registryAccess rest:( _ ('*'/'/')   _ registryAccess )* { return reduceOperatorChain(left, rest) }
 registryAccess = exp:primaryExpression accessChain:(_ '.' _ id)* { return accessChain.reduce((target,[,,,id]) => Access(target, id) , exp) }
 
 primaryExpression = 'if ' _ condition:expression _ 'then' _ thenExpression:expression _ 'else' _ elseExpression:expression { return If(condition,thenExpression,elseExpression) }

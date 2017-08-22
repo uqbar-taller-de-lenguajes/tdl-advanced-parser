@@ -1,4 +1,4 @@
-import { Access, BinaryOp, Bool, If, IsZero, Prev, Registry, Succ, Zero } from '../src/model'
+import { Access, BinaryOp, Bool, If, IsZero, Neg, Prev, Registry, Succ, Zero } from '../src/model'
 import { describe, it } from 'mocha'
 
 import { expect } from 'chai'
@@ -63,9 +63,16 @@ describe('simple language parser', () => {
       expect(parse(src)).to.deep.equal(expected)
     })
 
-    it('should parse operators associated to the proper precedence', () => {
-      const src = '0 + 0 * 0 - 0'
-      const expected = BinaryOp(BinaryOp(Zero, '+', BinaryOp(Zero, '*', Zero)), '-', Zero)
+    it('should parse number operators associated to the proper precedence', () => {
+      const src = '0 + 0 * 0 - 0 / 0'
+      const expected = BinaryOp(BinaryOp(Zero, '+', BinaryOp(Zero, '*', Zero)), '-', BinaryOp(Zero, '/', Zero))
+
+      expect(parse(src)).to.deep.equal(expected)
+    })
+
+    it('should parse boolean operators associated to the proper precedence', () => {
+      const src = '!true && !false || true'
+      const expected = BinaryOp(BinaryOp(Neg(Bool(true)), '&&', Neg(Bool(false))), '||', Bool(true))
 
       expect(parse(src)).to.deep.equal(expected)
     })
