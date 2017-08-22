@@ -1,4 +1,4 @@
-import { Bool, If, IsZero, Prev, Succ, Zero } from '../src/model'
+import { Access, Bool, If, IsZero, Prev, Registry, Succ, Zero } from '../src/model'
 import { describe, it } from 'mocha'
 
 import { expect } from 'chai'
@@ -45,6 +45,20 @@ describe('simple language parser', () => {
         If(Bool(true), Bool(true), Bool(false)),
         If(Bool(false), Bool(false), Bool(true)),
       )
+
+      expect(parse(src)).to.deep.equal(expected)
+    })
+
+    it('should parse registry literals', () => {
+      const src = '{x:0; y:true;}'
+      const expected = Registry([{ key: 'x', value: Zero }, { key: 'y', value: Bool(true) }])
+
+      expect(parse(src)).to.deep.equal(expected)
+    })
+
+    it('should parse registry access chains', () => {
+      const src = '{x:0;}.x.y'
+      const expected = Access(Access(Registry([{ key: 'x', value: Zero }]), 'x'), 'y')
 
       expect(parse(src)).to.deep.equal(expected)
     })
